@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react';
+import styles from './styles/tables.module.css';
 
 type Row = {
     appliance: string,
+    powerConsumption: number,
+    powerConsumptionUnit: string,
     usage: number,
-    // usageUnit: string,
+    usageUnit: string,
     energy: number,
     cost: number
 }
@@ -15,28 +18,35 @@ type TableProps = {
 function Table({ rows }: TableProps) {
 
     return (
-        <div className='table w-1/2 mt-5 rounded border-solid border-black border-1'>
-            <div className='table-header-group'>
-                <div className='table-row'> 
-                    <div className='table-cell'>Appliance Name</div>
-                    <div className='table-cell'>Usage Per Day</div>
-                    <div className='table-cell'>Energy</div>
-                    <div className='table-cell'>Cost</div>
+        <div className={styles.table}>
+            <div className={styles['table-header']}>
+                <div className={styles['table-row']}> 
+                    <div className={styles['table-cell']}>Appliance Name</div>
+                    <div className={styles['table-cell']}>Power Consumption</div>
+                    <div className={styles['table-cell']}>Usage Per Day</div>
+                    <div className={styles['table-cell']}>Estimated kWhr Use</div>
+                    <div className={styles['table-cell']}>Estimated Cost</div>
                 </div>
             </div>
-            <div className='table-row-group'>
+            <div className={styles['table-row-group']}>
             {
-                rows.map((row, index) => (
-                    <div className='table-row' key={index}>
-                        <div className='table-cell'>{row.appliance}</div>
-                        <div className='table-cell'>{row.usage}</div>
-                        <div className='table-cell'>{row.energy}</div>
-                        <div className='table-cell'>{row.cost}</div>
+                rows.length > 0 ? rows.map((row, index) => (
+                    <div className={styles['table-row']} key={index}>
+                        <div className={styles['table-cell']}>{row.appliance}</div>
+                        <div className={styles['table-cell']}>{row.powerConsumption} {row.powerConsumptionUnit}</div>
+                        <div className={styles['table-cell']}>{row.usage} {row.usageUnit}</div>
+                        <div className={`${styles['table-cell']} ${styles['number']}`}>{row.energy}</div>
+                        <div className={`${styles['table-cell']} ${styles['number']}`}>{row.cost}</div>
                     </div>
                 ))
+                : (
+                    <div className={`${styles['table-row']} ${styles['table-empty']}`}>
+                        <div className={styles['table-cell']} >No data available</div>
+                    </div>
+                )
             }
             </div>
-            <div className='table-footer-group'>
+            <div className={styles['table-footer-group']}>
 
             </div>
         </div>
