@@ -1,15 +1,31 @@
 import React from 'react';
-import style from './button.module.css';
+import style from './styles/button.module.css';
 
-function Button() {
+type ButtonProps = {
+    value: any,
+    onClick?: (param:any) => void,
+    type?: string,
+    btnClass?: string
+}
+
+function Button({value, onClick, type="button", btnClass="normal" }: ButtonProps) {
+
+    let btnStyle = style.normal;
+
+    switch (btnClass) {
+
+        case 'submit':
+            btnStyle = style.primary
+            break;
+    }
 
     return (
 
         <input 
-            className={style.btn}
-            type="button" 
-            value="Test" 
-            onClick={e => console.log('hello')}
+            className={`${style.btn} ${btnStyle} ${style.container} mt-2`}
+            type={type}
+            value={value}
+            onClick={onClick}
         />
     )
 }
