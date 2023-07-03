@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
-import styles from "./select.module.css";
-import fieldStyles from "./fields.module.css"
+import styles from "./styles/select.module.css";
+import fieldStyles from "./styles/fields.module.css"
 
 type SelectOption = {
 

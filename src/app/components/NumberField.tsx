@@ -1,5 +1,5 @@
 import React, { useId } from 'react'
-import fieldStyles from './fields.module.css';
+import fieldStyles from './styles/fields.module.css';
 
 type NumberProps = {
     label: string,
