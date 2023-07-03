@@ -4,10 +4,15 @@ import Select from './Select'
 import NumberField from './NumberField';
 import Button from './Button';
 
-// const rows = [
-//     { appliance: 'first', usage: 1, energy: 2, cost: 3 },
-//     { appliance: 'second', usage: 2, energy: 3, cost: 4 }
-// ];
+type tableRow = {
+    appliance: string,
+    powerConsumption: number,
+    powerConsumptionUnit: string,
+    usage: number,
+    usageUnit: string,
+    energy: number,
+    cost: number
+};
 
 const dateRangeOptions = [
     {label: "Day", value: 1},
@@ -17,9 +22,9 @@ const dateRangeOptions = [
 
 // Values with respect to 1 hour
 const dailyUsageUnits = [
-    {label: "Hours", value:  1},
-    {label: "Minutes", value: 60},
-    {label: "Seconds", value: 3600}
+    {label: "Hour/s", value:  1},
+    {label: "Minute/s", value: 60},
+    {label: "Second/s", value: 3600}
 ]
 
 const powerUnits = [
@@ -30,6 +35,7 @@ const powerUnits = [
 function App() {
 
     const [pricePerKWH, setPricePerKWH] = useState<number>(0);
+    const [priceDisabled, setPriceDisabled] = useState<boolean>(false);
     const [dailyUsage, setDailyUsage] = useState<number>(0);
     const [dailyUsageUnit, setDailyUsageUnit] = useState<typeof dailyUsageUnits[0] | undefined>(dailyUsageUnits[0]);
     const [power, setPower] = useState<number>(0);
@@ -39,7 +45,7 @@ function App() {
     const [energy, setEnergy] = useState<number>(0);
     const [cost, setCost] = useState<number>(0);
 
-    const [tableRows, setTableRows] = useState<any[]>([])
+    const [tableRows, setTableRows] = useState<tableRow[]>([]);
 
     useEffect(() => {
 
@@ -71,33 +77,57 @@ function App() {
         return costPerDay * (dateRange?.value || 1);
     }
 
+    function clearFields() {
+
+        setPower(0);
+        setDailyUsage(0);
+    }
+
+    function addTableRow() {
+
+        const newRow: tableRow = {
+            appliance: 'test',
+            powerConsumption: power,
+            powerConsumptionUnit: powerUnit?.label || '',
+            usage: dailyUsage,
+            usageUnit: dailyUsageUnit?.label || '',
+            energy: energy,
+            cost: cost
+        };
+
+        setTableRows((currentRows) => [...currentRows, newRow]);
+        clearFields();
+        setPriceDisabled(true);
+    }
+
     return (
         <div className='mt-5 ml-5'>
             <h1>Electricity Cost Calculator</h1>
 
             <div>
-                <div className='mt-3 flex flex-auto'>
-                    <NumberField label="Price per Kilowatt-Hour" value={pricePerKWH} onChange={o => {setPricePerKWH(o)}} />
+                <div className='input-row'>
+                    <NumberField label="Price per Kilowatt-Hour" value={pricePerKWH} onChange={o => {setPricePerKWH(o)}} disabled={priceDisabled} />
                     <Select label='Date Range' options={dateRangeOptions} onChange={o => {setDateRange(o)}} value={dateRange} allowClear={false} />
                 </div>
 
-                <div className='mt-3 flex flex-auto'>
+                <div className='input-row'>
                     <NumberField label='Power Consumption' value={power} onChange={o => {setPower(o)}} />
                     <Select label='Unit' options={powerUnits} onChange={o => {setPowerUnit(o)}} value={powerUnit} allowClear={false} />
                 </div>
                 
-                <div className='mt-3 flex flex-auto'>
+                <div className='input-row'>
                     <NumberField label='Usage per Day' value={dailyUsage} onChange={o => {setDailyUsage(o)}}/>
                     <Select label='Unit' options={dailyUsageUnits} onChange={o => {setDailyUsageUnit(o)}} value={dailyUsageUnit} allowClear={false} />
                 </div>
 
-                <div className='mt-3 flex flex-auto'>
+                <div className='input-row'>
                     <NumberField label='Estimated kWhr Use' value={energy} disabled={true} />
                     <NumberField label='Estimated Cost' value={cost} disabled={true} />
                 </div>
 
-                <div>
-                    <Button />
+                <div className='input-row'>
+                    <Button value="Add Appliance" onClick={addTableRow} btnClass='submit'/>
+                    <Button value="Clear" onClick={clearFields}/>
                 </div>
             </div>
 
