@@ -10,6 +10,7 @@
     border-radius: 0.25em;
     outline: none;
     margin-left: 0.25em;
+    padding-top: 1em;
 }
 
 .container:focus {
@@ -21,12 +22,10 @@
 
     position: absolute;
     font-size: 0.9em;
-    left: 0.75rem;
-    top: -0.5rem;
-    --tw-text-opacity: 1;
+    left: 0.25rem;
+    top: 0.03rem;
+    --tw-text-opacity: 1.5;
     color: rgb(107 114 128 / var(--tw-text-opacity));
-    --tw-bg-opacity: 1;
-    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
     padding-left: 0.25rem;
     padding-right: 0.25rem;
 }
