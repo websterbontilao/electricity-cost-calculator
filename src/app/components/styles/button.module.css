@@ -1,0 +1,45 @@
+.container {
+    position: relative;
+    width: 12em;
+    min-height: 1em;
+    border: 0.05em solid var(--default);
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.25em;
+    outline: none;
+    margin-left: 0.25em;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    border: none;
+    border-radius: 0.25em;
+    color: white;
+}
+
+/* Default Button Styles */
+
+.btn.normal:hover {
+    cursor: pointer;
+    background-color: var(--default-alt);
+}
+
+.btn.normal {
+    background-color: var(--default);
+}
+
+/* Primary Button Styles */
+
+.btn.primary {
+
+    background-color: var(--main-600);
+}
+
+.btn.primary:hover {
+
+    background-color: var(--main-700);
+}
+
