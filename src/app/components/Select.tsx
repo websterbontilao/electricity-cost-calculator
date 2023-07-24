@@ -2,6 +2,9 @@ import { useId, useState } from "react";
 import styles from "./styles/select.module.css";
 import fieldStyles from "./styles/fields.module.css"
 
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+
 type SelectOption = {
 
     label: string,
@@ -45,7 +48,7 @@ const Select = ({ label, value, onChange, options, allowClear = true  }: SelectP
                 onBlur={ () => setIsOpen(false) }
                 onClick={ () => setIsOpen(prev => !prev) }
                 tabIndex={0} 
-                className={fieldStyles.container}
+                className={`${fieldStyles.container} ${styles.select}`}
             >
                 <span className={styles.value}>{value?.label}</span>
 
@@ -66,7 +69,9 @@ const Select = ({ label, value, onChange, options, allowClear = true  }: SelectP
 
                 <div className={styles.divider}></div>
 
-                <div className={`${styles.caret} ${isOpen ? styles.show : ""}`}></div>
+                <div className={styles.caret}>
+                    {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </div>
 
                 <ul className={`${styles.options} ${isOpen ? styles.show : ""}`}>
                     {options.map((option, index) => (
