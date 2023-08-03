@@ -10,6 +10,7 @@
     border-radius: 0.25em;
     outline: none;
     margin-left: 0.25em;
+    cursor: pointer;
 }
 
 .btn {
@@ -23,7 +24,6 @@
 /* Default Button Styles */
 
 .btn.normal:hover {
-    cursor: pointer;
     background-color: var(--default-alt);
 }
 

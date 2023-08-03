@@ -83,3 +83,8 @@
 
     background-color: hsl(200, 100%, 70%);
 }
+
+.disabled {
+    background-color: #f0f0f0;
+    pointer-events: none;
+}

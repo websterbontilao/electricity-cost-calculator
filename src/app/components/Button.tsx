@@ -1,5 +1,5 @@
 import React from 'react';
-import style from './styles/button.module.css';
+import style from '@styles/button.module.css';
 
 type ButtonProps = {
   value: any,

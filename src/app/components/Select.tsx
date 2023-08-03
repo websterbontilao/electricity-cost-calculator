@@ -1,23 +1,43 @@
 import { useId, useState } from "react";
-import styles from "./styles/select.module.css";
-import fieldStyles from "./styles/fields.module.css"
+import styles from "@styles/select.module.css";
+import fieldStyles from "@styles/fields.module.css"
+import { json } from "stream/consumers";
 
-type SelectOption = {
-
-  label: string,
-  value: any
+export interface SelectOptionType {
+  label: string;
+  value: any;
+}
+interface SelectProps {
+  label: string;
+  value?: SelectOptionType;
+  options: SelectOptionType[];
+  onChange: (value: SelectOptionType | undefined) => void;
+  allowClear?: boolean;
+  disabled?: boolean;
 }
 
-type SelectProps = {
-
-  label: string,
-  value?: SelectOption,
-  options: SelectOption[],
-  onChange: (value: SelectOption | undefined) => void,
-  allowClear?: boolean
+interface JsonOptions {
+  [key: string]: {
+    label: string;
+    value: number;
+  };
 }
 
-const Select = ({ label, value, onChange, options, allowClear = true }: SelectProps) => {
+export function jsonToSelectOptions(jsonData: JsonOptions) {
+
+  const options: SelectOptionType[] = [];
+
+  for (const index in jsonData) {
+
+    const {label, value} = jsonData[index];
+
+    options.push({label, value});
+  }
+
+  return options;
+}
+
+const Select = ({ label, value, onChange, options, allowClear = true, disabled = false }: SelectProps) => {
 
   const id = useId();
 
@@ -29,18 +49,18 @@ const Select = ({ label, value, onChange, options, allowClear = true }: SelectPr
     onChange(undefined);
   }
 
-  function selectOption(option: SelectOption) {
+  function selectOption(option: SelectOptionType) {
 
     onChange(option);
   }
 
-  function isOptionSelected(option: SelectOption) {
+  function isOptionSelected(option: SelectOptionType) {
 
     return option === value;
   }
 
   return (
-    <div className="relative">
+    <div className={`relative ${disabled ? styles.disabled : ''}`}>
       <div
         onBlur={() => setIsOpen(false)}
         onClick={() => setIsOpen(prev => !prev)}

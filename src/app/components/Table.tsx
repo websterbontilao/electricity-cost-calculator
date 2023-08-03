@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles/tables.module.css';
+import styles from '@styles/tables.module.css';
 
 type Row = {
   appliance: string,

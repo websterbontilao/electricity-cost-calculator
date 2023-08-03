@@ -1,0 +1,14 @@
+{
+  "hours": {
+    "label": "Hour/s",
+    "value": 1
+  },
+  "minutes": {
+    "label": "Minute/s",
+    "value": 60
+  },
+  "seconds": {
+    "label": "Second/s",
+    "value": 3600
+  }
+}

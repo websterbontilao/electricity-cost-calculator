@@ -29,3 +29,15 @@
     padding-left: 0.25rem;
     padding-right: 0.25rem;
 }
+
+.error-msg {
+    
+    margin-left: 0.25em;
+    font-size: 0.75em;
+    color: red;
+}
+
+.error-field {
+
+    border-color: red;
+}

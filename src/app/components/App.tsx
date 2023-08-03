@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Table from './Table';
-import Select from './Select'
-import NumberField from './NumberField';
-import Button from './Button';
+import Table from '@components/Table';
+import Select, { SelectOptionType, jsonToSelectOptions } from '@components/Select'
+import NumberField from '@components/NumberField';
+import Button from '@components/Button';
+import TextField from './TextField';
 
 type tableRow = {
   appliance: string,
@@ -14,26 +15,19 @@ type tableRow = {
   cost: number
 };
 
-const dateRangeOptions = [
-  { label: "Day", value: 1 },
-  { label: "Month", value: 30 },
-  { label: "Year", value: 365 }
-];
+const dateRangeOptions: SelectOptionType[] = jsonToSelectOptions( require('@/app/data/dateRange.json') );
 
 // Values with respect to 1 hour
-const dailyUsageUnits = [
-  { label: "Hour/s", value: 1 },
-  { label: "Minute/s", value: 60 },
-  { label: "Second/s", value: 3600 }
-]
+const dailyUsageUnits: SelectOptionType[] = jsonToSelectOptions( require('@/app/data/dailyUsage.json') );
 
-const powerUnits = [
+const powerUnits: SelectOptionType[] = [
   { label: "Watts", value: 1 },
   { label: "Kilowatts", value: 1000 }
 ]
 
 function App() {
 
+  const [appliance, setAppliance] = useState<string>('');
   const [pricePerKWH, setPricePerKWH] = useState<number>(0);
   const [priceDisabled, setPriceDisabled] = useState<boolean>(false);
   const [dailyUsage, setDailyUsage] = useState<number>(0);
@@ -81,12 +75,13 @@ function App() {
 
     setPower(0);
     setDailyUsage(0);
+    setAppliance('');
   }
 
   function addTableRow() {
 
     const newRow: tableRow = {
-      appliance: 'test',
+      appliance: appliance,
       powerConsumption: power,
       powerConsumptionUnit: powerUnit?.label || '',
       usage: dailyUsage,
@@ -105,33 +100,35 @@ function App() {
       <h1>Electricity Cost Calculator</h1>
 
       <div>
-        <form action="">
 
-          <div className='input-row'>
-            <NumberField label="Price per Kilowatt-Hour" value={pricePerKWH} onChange={o => { setPricePerKWH(o) }} disabled={priceDisabled} />
-            <Select label='Date Range' options={dateRangeOptions} onChange={o => { setDateRange(o) }} value={dateRange} allowClear={false} />
-          </div>
+        <div className='input-row'>
+          <NumberField label="Price per Kilowatt-Hour" value={pricePerKWH} onChange={o => { setPricePerKWH(o) }} disabled={priceDisabled} />
+          <Select label='Date Range' options={dateRangeOptions} onChange={o => { setDateRange(o) }} value={dateRange} allowClear={false} disabled={priceDisabled} />
+        </div>
 
-          <div className='input-row'>
-            <NumberField label='Power Consumption' value={power} onChange={o => { setPower(o) }} />
-            <Select label='Unit' options={powerUnits} onChange={o => { setPowerUnit(o) }} value={powerUnit} allowClear={false} />
-          </div>
+        <div className='input-row'>
+          <TextField label='Appliance Name' value={appliance} onChange={o => { setAppliance(o.target.value) }} />
+        </div>
 
-          <div className='input-row'>
-            <NumberField label='Usage per Day' value={dailyUsage} onChange={o => { setDailyUsage(o) }} />
-            <Select label='Unit' options={dailyUsageUnits} onChange={o => { setDailyUsageUnit(o) }} value={dailyUsageUnit} allowClear={false} />
-          </div>
+        <div className='input-row'>
+          <NumberField label='Power Consumption' value={power} onChange={o => { setPower(o) }} />
+          <Select label='Unit' options={powerUnits} onChange={o => { setPowerUnit(o) }} value={powerUnit} allowClear={false} />
+        </div>
 
-          <div className='input-row'>
-            <NumberField label='Estimated kWhr Use' value={energy} disabled={true} />
-            <NumberField label='Estimated Cost' value={cost} disabled={true} />
-          </div>
+        <div className='input-row'>
+          <NumberField label='Usage per Day' value={dailyUsage} onChange={o => { setDailyUsage(o) }} />
+          <Select label='Unit' options={dailyUsageUnits} onChange={o => { setDailyUsageUnit(o) }} value={dailyUsageUnit} allowClear={false} />
+        </div>
 
-          <div className='input-row'>
-            <Button type='submit' value="Add Appliance" onClick={addTableRow} btnClass='submit' />
-            <Button value="Clear" onClick={clearFields} />
-          </div>
-        </form>
+        <div className='input-row'>
+          <NumberField label='Estimated kWhr Use' value={energy} disabled={true} errorMessage='Invalid Number' isError={true} />
+          <NumberField label='Estimated Cost' value={cost} disabled={true} />
+        </div>
+
+        <div className='input-row'>
+          <Button type='submit' value="Add Appliance" onClick={addTableRow} btnClass='submit' />
+          <Button value="Clear" onClick={clearFields} />
+        </div>
 
       </div>
 

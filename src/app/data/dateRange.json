@@ -1,0 +1,14 @@
+{
+    "day": {
+      "label": "Day",
+      "value": 1
+    },
+    "month": {
+      "label": "Month",
+      "value": 30
+    },
+    "year   ": {
+      "label": "Year",
+      "value": 365
+    }
+}

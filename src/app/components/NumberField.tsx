@@ -1,15 +1,18 @@
-import React, { useId } from 'react'
-import fieldStyles from './styles/fields.module.css';
+import React, { useId } from 'react';
+import fieldStyles from '@styles/fields.module.css';
+import styles from '@styles/number.module.css';
 
-type NumberProps = {
-  label: string,
-  value: number,
-  onChange?: (value: number) => void,
-  floatingPoint?: number,
-  disabled?: boolean
+interface NumberProps {
+  label: string;
+  value: number;
+  onChange?: (value: number) => void;
+  floatingPoint?: number;
+  disabled?: boolean;
+  errorMessage?: string;
+  isError?: boolean;
 }
 
-function Number({ label, value, onChange, floatingPoint = 2, disabled = false }: NumberProps) {
+function Number({ label, value, onChange, floatingPoint = 2, disabled = false, isError = false, errorMessage = '' }: NumberProps) {
 
   const id = useId();
 
@@ -53,7 +56,7 @@ function Number({ label, value, onChange, floatingPoint = 2, disabled = false }:
         <input
           id={id}
           type="text"
-          className={fieldStyles.container}
+          className={`${fieldStyles.container} ${isError ? fieldStyles['error-field'] : ''}`}
           onChange={(e) => onNumberChange(e)}
           value={value}
           disabled={disabled}
@@ -62,6 +65,7 @@ function Number({ label, value, onChange, floatingPoint = 2, disabled = false }:
         <label htmlFor={id} className={fieldStyles["field-label"]}>
           {label}
         </label>
+        { isError && errorMessage && <span className={fieldStyles['error-msg']}>{errorMessage}</span>}
       </div>
     </>
   )
