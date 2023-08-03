@@ -4,98 +4,98 @@ import fieldStyles from "./styles/fields.module.css"
 
 type SelectOption = {
 
-    label: string,
-    value: any
+  label: string,
+  value: any
 }
 
 type SelectProps = {
 
-    label: string,
-    value?: SelectOption,
-    options: SelectOption[],
-    onChange: (value: SelectOption | undefined) => void,
-    allowClear?: boolean
+  label: string,
+  value?: SelectOption,
+  options: SelectOption[],
+  onChange: (value: SelectOption | undefined) => void,
+  allowClear?: boolean
 }
 
-const Select = ({ label, value, onChange, options, allowClear = true  }: SelectProps) => {
+const Select = ({ label, value, onChange, options, allowClear = true }: SelectProps) => {
 
-    const id = useId();
+  const id = useId();
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
 
-    function clearOptions() {
+  function clearOptions() {
 
-        onChange(undefined);
-    }
+    onChange(undefined);
+  }
 
-    function selectOption(option: SelectOption) {
+  function selectOption(option: SelectOption) {
 
-        onChange(option);
-    }
+    onChange(option);
+  }
 
-    function isOptionSelected(option: SelectOption) {
+  function isOptionSelected(option: SelectOption) {
 
-        return option === value;
-    }
+    return option === value;
+  }
 
-    return (
-        <div className="relative">
-            <div
-                onBlur={ () => setIsOpen(false) }
-                onClick={ () => setIsOpen(prev => !prev) }
-                tabIndex={0} 
-                className={fieldStyles.container}
+  return (
+    <div className="relative">
+      <div
+        onBlur={() => setIsOpen(false)}
+        onClick={() => setIsOpen(prev => !prev)}
+        tabIndex={0}
+        className={fieldStyles.container}
+      >
+        <span className={styles.value}>{value?.label}</span>
+
+        {
+          allowClear ?
+            <button
+              onClick={e => {
+
+                e.stopPropagation();
+                clearOptions();
+              }}
+              className={styles["clear-btn"]}
             >
-                <span className={styles.value}>{value?.label}</span>
+              &times;
+            </button>
+            : ""
+        }
 
-                {
-                    allowClear ?
-                        <button 
-                            onClick={ e => {
+        <div className={styles.divider}></div>
 
-                                e.stopPropagation();
-                                clearOptions();
-                            }}
-                            className={styles["clear-btn"]}
-                        >
-                            &times;
-                        </button>
-                        : ""
-                }
+        <div className={`${styles.caret} ${isOpen ? styles.show : ""}`}></div>
 
-                <div className={styles.divider}></div>
+        <ul className={`${styles.options} ${isOpen ? styles.show : ""}`}>
+          {options.map((option, index) => (
+            <li
+              onClick={e => {
 
-                <div className={`${styles.caret} ${isOpen ? styles.show : ""}`}></div>
+                e.stopPropagation();
+                selectOption(option);
+                setIsOpen(false);
+              }}
+              onMouseEnter={() => setHighlightedIndex(index)}
+              key={option.label}
+              className={`
+                ${styles.option} 
+                ${isOptionSelected(option) ? styles.selected : ""}
+                ${index === highlightedIndex ? styles.highlighted : ""}
+              `}
+            >
+              {option.label}
+            </li>
+          ))}
+        </ul>
 
-                <ul className={`${styles.options} ${isOpen ? styles.show : ""}`}>
-                    {options.map((option, index) => (
-                        <li
-                            onClick={e => {
-
-                                e.stopPropagation();
-                                selectOption(option);
-                                setIsOpen(false);
-                            }}
-                            onMouseEnter={() => setHighlightedIndex(index)}
-                            key={option.label} 
-                            className={`
-                                ${styles.option} 
-                                ${isOptionSelected(option) ? styles.selected : ""}
-                                ${index === highlightedIndex ? styles.highlighted : ""}
-                            `}
-                        >
-                            {option.label}
-                        </li>
-                    ))}
-                </ul>
-
-            </div>
-            <label htmlFor={id} className={fieldStyles["field-label"]}>
-                {label}
-            </label>
-        </div>
-    );
+      </div>
+      <label htmlFor={id} className={fieldStyles["field-label"]}>
+        {label}
+      </label>
+    </div>
+  );
 }
 
 

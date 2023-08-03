@@ -2,69 +2,69 @@ import React, { useId } from 'react'
 import fieldStyles from './styles/fields.module.css';
 
 type NumberProps = {
-    label: string,
-    value: number,
-    onChange?: (value: number) => void,
-    floatingPoint?: number,
-    disabled?: boolean
+  label: string,
+  value: number,
+  onChange?: (value: number) => void,
+  floatingPoint?: number,
+  disabled?: boolean
 }
 
-function Number({label, value, onChange, floatingPoint = 2, disabled = false} : NumberProps ) {
-    
-    const id = useId();
+function Number({ label, value, onChange, floatingPoint = 2, disabled = false }: NumberProps) {
 
-    function validateNumber(value: any, floatingPoint?: number) : boolean {
+  const id = useId();
 
-        let ret = false;
+  function validateNumber(value: any, floatingPoint?: number): boolean {
 
-        if (!isNaN(value)) {
+    let ret = false;
 
-            ret = true;
+    if (!isNaN(value)) {
 
-            if (floatingPoint && floatingPoint > 0) {
+      ret = true;
 
-                ret = ((value + "").split(".")[1]?.length || 0) <= floatingPoint;
-            }
-        }
+      if (floatingPoint && floatingPoint > 0) {
 
-        return ret;
+        ret = ((value + "").split(".")[1]?.length || 0) <= floatingPoint;
+      }
     }
 
-    function onNumberChange(event: any) {
+    return ret;
+  }
 
-        if (!validateNumber(event?.target?.value, floatingPoint)) return;
+  function onNumberChange(event: any) {
 
-        let value = (event?.target?.value);
+    if (!validateNumber(event?.target?.value, floatingPoint)) return;
 
-        if (parseFloat(value) !== 0 && parseFloat(value) > 1) {
+    let value = (event?.target?.value);
 
-            value = value.replace(/^0+/, '');
-        }
+    if (parseFloat(value) !== 0 && parseFloat(value) > 1) {
 
-        if (onChange) {
-
-            onChange(value);
-        }
+      value = value.replace(/^0+/, '');
     }
 
-    return (
-        <>
-            <div className="relative">
-                <input
-                    id={id}
-                    type="text"
-                    className={fieldStyles.container}
-                    onChange={(e) => onNumberChange(e)}
-                    value={value}
-                    disabled={disabled}
-                />
+    if (onChange) {
 
-                <label htmlFor={id} className={fieldStyles["field-label"]}>
-                    {label}
-                </label>
-            </div>
-        </>
-    )
+      onChange(value);
+    }
+  }
+
+  return (
+    <>
+      <div className="relative">
+        <input
+          id={id}
+          type="text"
+          className={fieldStyles.container}
+          onChange={(e) => onNumberChange(e)}
+          value={value}
+          disabled={disabled}
+        />
+
+        <label htmlFor={id} className={fieldStyles["field-label"]}>
+          {label}
+        </label>
+      </div>
+    </>
+  )
 }
 
 export default Number
