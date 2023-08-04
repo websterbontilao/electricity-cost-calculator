@@ -1,7 +1,9 @@
 import { useId, useState } from "react";
 import styles from "@styles/select.module.css";
 import fieldStyles from "@styles/fields.module.css"
-import { json } from "stream/consumers";
+
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 export interface SelectOptionType {
   label: string;
@@ -109,6 +111,9 @@ const Select = ({ label, value, onChange, options, allowClear = true, disabled =
             </li>
           ))}
         </ul>
+        <div className={styles.caret}>
+            {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        </div>
 
       </div>
       <label htmlFor={id} className={fieldStyles["field-label"]}>
