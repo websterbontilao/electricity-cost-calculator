@@ -1,0 +1,10 @@
+{
+    "watts": {
+      "label": "Watts",
+      "value": 1
+    },
+    "kilowatts": {
+      "label": "Kilowatts",
+      "value": 1000
+    }
+}

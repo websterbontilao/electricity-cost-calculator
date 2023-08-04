@@ -5,6 +5,15 @@ import NumberField from '@components/NumberField';
 import Button from '@components/Button';
 import TextField from './TextField';
 
+import {
+  calculateItemPower,
+  calculateUsagePerDay,
+  calculateEnergyPerDay,
+  calculateCostPerDay,
+  calculateEnergy,
+  calculateCost
+} from '@components/utils/EnergyCalculator';
+
 type tableRow = {
   appliance: string,
   powerConsumption: number,
@@ -20,10 +29,7 @@ const dateRangeOptions: SelectOptionType[] = jsonToSelectOptions( require('@/app
 // Values with respect to 1 hour
 const dailyUsageUnits: SelectOptionType[] = jsonToSelectOptions( require('@/app/data/dailyUsage.json') );
 
-const powerUnits: SelectOptionType[] = [
-  { label: "Watts", value: 1 },
-  { label: "Kilowatts", value: 1000 }
-]
+const powerUnits: SelectOptionType[] = jsonToSelectOptions( require('@/app/data/powerUnits.json') );
 
 function App() {
 
@@ -43,33 +49,17 @@ function App() {
 
   useEffect(() => {
 
-    const itemEnergy = (Math.round(calculateEnergy() * 100) / 100).toFixed(2);
-    const itemElectricityCost = (Math.round(calculateCost() * 100) / 100).toFixed(2);
+    const itemPower = calculateItemPower(power, powerUnit?.value ?? 1);
+    const usagePerDay = calculateUsagePerDay(dailyUsage, dailyUsageUnit?.value ?? 1);
+    const energyPerDay = calculateEnergyPerDay(itemPower, usagePerDay);
+    const costPerDay = calculateCostPerDay(energyPerDay, pricePerKWH);
+    const itemEnergy = calculateEnergy(energyPerDay, dateRange?.value ?? 1);
+    const itemElectricityCost = calculateCost(costPerDay, dateRange?.value ?? 1);
 
     setEnergy(parseFloat(itemEnergy));
     setCost(parseFloat(itemElectricityCost));
 
   }, [dateRange, dailyUsageUnit, powerUnit, pricePerKWH, dailyUsage, power]);
-
-  function calculateEnergyPerDay() {
-
-    const itemPower = power * (powerUnit?.value || 1);
-    const usagePerDay = dailyUsage / (dailyUsageUnit?.value || 1);
-
-    return itemPower * usagePerDay / 1000;
-  }
-
-  function calculateEnergy() {
-
-    return calculateEnergyPerDay() * (dateRange?.value || 1);
-  }
-
-  function calculateCost() {
-
-    const costPerDay = calculateEnergyPerDay() * pricePerKWH;
-
-    return costPerDay * (dateRange?.value || 1);
-  }
 
   function clearFields() {
 
@@ -121,7 +111,7 @@ function App() {
         </div>
 
         <div className='input-row'>
-          <NumberField label='Estimated kWhr Use' value={energy} disabled={true} errorMessage='Invalid Number' isError={true} />
+          <NumberField label='Estimated kWhr Use' value={energy} disabled={true} errorMessage='Invalid Number' />
           <NumberField label='Estimated Cost' value={cost} disabled={true} />
         </div>
 
