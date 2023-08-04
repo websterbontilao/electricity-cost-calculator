@@ -88,8 +88,6 @@ const Select = ({ label, value, onChange, options, allowClear = true, disabled =
 
         <div className={styles.divider}></div>
 
-        <div className={`${styles.caret} ${isOpen ? styles.show : ""}`}></div>
-
         <ul className={`${styles.options} ${isOpen ? styles.show : ""}`}>
           {options.map((option, index) => (
             <li
